@@ -1,0 +1,321 @@
+*{
+	font-family: Roboto, Arial, sans-serif;
+}
+body{
+	background: #FAF8FD;
+}
+.text-col1{
+	color: #E2D1BF;
+}
+.text-col2{
+	color: #9B785C;
+}
+.text-col3{
+	color: rgba(250, 248, 253, 0.5);
+}
+.text-col4{
+	color: #FAF8FD;
+}
+.bg-col1{
+	background: #E2D1BF;
+}
+.bg-col2{
+	background: #9B785C;
+}
+.bg-col3{
+	background: rgba(250, 248, 253, 0.5);
+}
+.bg-col4{
+	background-color: #FAF8FD;
+}
+.white-border-b,
+.card.white-border-b,
+.kotak-header.white-border-b,
+hr.white-border,
+.content hr.white-border{
+	border-bottom: 1px solid #FAF8FD;
+	opacity: 1;
+}
+
+.btn, .btn.loginbtn,
+.btn.buybtn,
+.btn.konfirmasi{
+	background-color: transparent;
+	background: none;
+	border-radius: 10px;
+	margin: 0;
+}
+.btn.bg-col1,
+.btn.bg-col1.black-text,
+.btn.border-col1{
+	color: #FAF8FD;
+	background: #E2D1BF;
+}
+.btn.bg-col2,
+.btn.bg-col2.black-text,
+.btn.border-col2{
+	color: #FAF8FD;
+	background: #9B785C;
+}
+.btn.bg-col3,
+.btn.bg-col3.black-text,
+.btn.border-col3{
+	color: #FAF8FD;
+	background: rgba(250, 248, 253, 0.5);
+}
+.btn.bg-col4,
+.btn.border-col4{
+	color: #000;
+	background: #FAF8FD;
+}
+.btn.bg-col1.black-text{
+	color: #000;
+}
+.btn.bg-col2.black-text{
+	color: #000;
+}
+.btn.bg-col3.black-text{
+	color: #000;
+}
+.btn.bg-col4{
+	color: #000;
+	background: #FAF8FD;
+}
+.btn.border-col1{
+	color: #E2D1BF;
+	background: transparent;
+}
+.btn.border-col2{
+	color: #9B785C;
+	background: transparent;
+}
+.btn.border-col3{
+	color:rgba(250, 248, 253, 0.5);
+	background: transparent;
+}
+.btn.border-col4{
+	color: #FAF8FD;
+	background: transparent;
+}
+.btn.konfirmasi{
+	width: 150px;
+	height: 45px;
+	font-size: 18px;
+	margin-left: 1rem;
+	margin-Right: 1rem;
+}
+
+/*Font*/
+.header{
+	font-family: Lobster;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 48px;
+	line-height: 45px;
+	align-items: center;
+	text-align: center;
+	text-decoration: none;
+	color: #000000;
+}
+.subtitle{
+	font-family: Roboto;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 14px;
+	line-height: 16px;
+	align-items: center;
+	text-align: center;
+	color: rgba(0, 0, 0, 0.8);
+}
+.daftarakun{
+	font-family: Roboto;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 9px;
+	line-height: 11px;
+	align-items: center;
+	text-align: center;
+	color: #000000;
+}
+
+/*NAV BAR*/
+nav{
+	background: #E2D1BF;
+}
+nav .helper{
+	background: #9B785C;
+} 
+.kotaksearch{
+	background: rgba(250, 248, 253, 0.5);
+}
+.kotaksearch .form-control{
+	background-color:transparent;
+}
+nav .header a{
+	font-family: Lobster;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 36px;
+	line-height: 45px;
+	align-items: center;
+	text-align: center;
+	text-decoration: none;
+	color: #000000;
+}
+nav div ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+nav div ul li{
+	float: left;
+	margin: 0 0.1rem;
+
+}
+nav .navigation ul:not(#produk) li:first-child{
+	margin: 0 1rem;
+	border-right: 3px solid #EAE3D1;
+}
+nav .helper ul li a{
+	color: #FAF8FD;
+	text-decoration: none;
+}
+nav .helper ul li:first-of-type{
+	margin-left: 0;
+}
+nav .helper ul li:not(:first-child){
+	margin: 0 0.5rem;
+	padding-left: 1rem;
+	border-left: 1px solid #EAE3D1;
+}
+
+/*Content*/
+.content{
+	background: #FAF8FD;
+	padding: 30px 35px 15px 35px;
+	min-height: 968px;
+}
+.content.daftar{
+	background: #E2D1BF;
+}
+.populer{
+	background: #9B785C;
+}
+.rekomendasi{
+	background: #E2D1BF;
+}
+.content > div:not(.utama){
+	margin-top: 30px;
+	padding: 0.5rem;
+}
+.content > div:not(.last){
+	margin-bottom: 30px;
+	padding: 0.5rem;
+}
+.content.produk .utama{
+	border-top-left-radius: 10px;
+	border-top-Right-radius: 10px;
+}
+.content div .card-title,
+.content div .card-title.mini-card{
+	margin: 0.5rem 0;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 48px;
+	line-height: 16px;
+	color: #000000;
+}
+.content div .judulProduk.card-title,
+.content div .Ulasan.card-title{
+	font-style: normal;
+	font-weight: 500;
+	font-size: 32px;
+	line-height: 16px;
+	color: #000000;
+}
+.content div .card-panel.card-title{
+	font-style: normal;
+	font-weight: 500;
+	font-size: 16px;
+	line-height: 16px;
+	color: #000000;
+}
+.content div .card-title.mini-card{
+	font-style: normal;
+	font-weight: 500;
+	font-size: 14px;
+	line-height: 16px;
+	color: #000000;
+}
+.content div .card{
+	overflow: hidden;
+	width: 20%;
+	height: 211px;
+	border-top-left-radius: 0;
+	border-top-Right-radius: 0;
+	border-bottom-left-radius: 10px;
+	border-bottom-Right-radius: 10px;
+	background-color:transparent;
+}
+.content div .normal-card.card{
+	width: 100%;
+	height: 100%;
+	border-radius: 0px;
+}
+.content div div .normal-card.card{
+	width: 100%;
+	height: 100%;
+	border-radius: 0px;
+}
+.content .populer .card{
+	background: rgba(226, 209, 191, 0.6);
+}
+.content .rekomendasi .card{
+	background: rgba(250, 248, 253, 0.5);
+}
+.content hr{
+	margin: 0.5rem 0;
+	color: #FAF8FD;
+}
+
+.content .kotak{
+	background: #FAF8FD;
+	box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+	border-radius: 10px;
+}
+.kotak-header{
+	background-color: transparent;
+	align-items:flex-end;
+	display: flex;
+	border-bottom: 1px solid #C4C4C4;
+}
+.content .kotak .formDaftar{
+	display: block;
+}
+.nav-tabs .nav-item .linkdaftar.nav-link{
+	color:#6c757d;
+	border: none;
+	background-color: transparent;
+}
+.nav-tabs .nav-item .linkdaftar.nav-link.active{
+	color: #000;
+	border: none;
+	border-bottom: 4px solid #9B785C;
+	background-color: transparent;
+}
+.form-content .form-input .form{
+	background-color: transparent;
+	background: #C4C4C4;
+}
+.form-content .form-input .tombolsubmit{
+	border-radius: 5px;
+	border-color: transparent;
+}
+
+.log-akun ul li{
+	padding: 0 0.5rem;
+}
+.log-akun ul li:not(:first-child){
+	border-left: 3px solid ;
+}
