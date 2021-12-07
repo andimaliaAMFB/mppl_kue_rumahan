@@ -273,20 +273,19 @@
 		function getProdukSpesifik($kode_produk,$typecek){
 			$sql = "SELECT kategori.nama as Nama_Kategori,
 							admin.kode_admin as Kode_akun,
+							admin.alamat,
 							produk.kode_produk as Kode_Produk, 
 							produk.nama as Nama_Produk,
+							produk.kode_kategori, 
 							produk.stok,
 							produk.hargasatuan,
     						produk.kadaluarsa,
-							admin.nama_toko ,
-					    	admin.alamat,
-					    	kategori.kode_kategori,
-					    	orderkuedetail.kode_order,
-					    	COUNT(orderkuedetail.kode_produk) AS populer,
-					    	SUM(orderkuedetail.jumlahBeli) AS banyakDiBeli
+							admin.nama_toko,
+			    			COUNT(orderkuedetail.kode_produk) AS populer,
+			    			SUM(orderkuedetail.jumlahBeli) AS banyakDiBeli
 					FROM ((orderkuedetail INNER JOIN produk) INNER JOIN admin) INNER JOIN kategori
-					WHERE ((orderkuedetail.kode_produk = produk.kode_produk) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (produk.kode_kategori = kategori.kode_kategori) AND (orderkuedetail.kode_produk = '$kode_produk'))
-					GROUP BY orderkuedetail.kode_produk";
+					WHERE (produk.kode_kategori = kategori.kode_kategori) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (produk.kode_produk = '$kode_produk')
+					GROUP BY produk.kode_produk";
 			$result = mysqli_query($this->koneksi, $sql);
 			while ($row = mysqli_fetch_array($result)){
 				switch ($typecek) {
