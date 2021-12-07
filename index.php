@@ -131,8 +131,6 @@
 					  	<img src="Asset/<?php echo $produk['kode_produk']; ?>.jpg" class="card-img-top" alt="...">
 					  	<div class="card-body p-2">
 						    <p class="card-text text-center"><?php echo $produk['nama']; ?></p>
-						    <!-- <p>Produk/<?php echo$produk['Nama_Kategori']."/".substr($produk['kode_produk'], 0,11)."-".$produk['nama']?>.php</p> -->
-						    <p><?php echo $produk['Nama_Kategori']."/".$produk['kode_produk']."-".$produk['nama'] ?></p>
 					  	</div>
 					</div>
 						<?php

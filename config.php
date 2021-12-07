@@ -271,7 +271,8 @@
 			
 		}
 		function getProdukSpesifik($kode_produk,$typecek){
-			$sql = "SELECT kategori.nama as Nama_Kategori,
+			$sql = "SELECT orderkuedetail.kode_order,
+							kategori.nama as Nama_Kategori,
 							admin.kode_admin as Kode_akun,
 							admin.alamat,
 							produk.kode_produk as Kode_Produk, 
@@ -284,7 +285,7 @@
 			    			COUNT(orderkuedetail.kode_produk) AS populer,
 			    			SUM(orderkuedetail.jumlahBeli) AS banyakDiBeli
 					FROM ((orderkuedetail INNER JOIN produk) INNER JOIN admin) INNER JOIN kategori
-					WHERE (produk.kode_kategori = kategori.kode_kategori) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (produk.kode_produk = '$kode_produk')
+					WHERE (produk.kode_kategori = kategori.kode_kategori) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (orderkuedetail.kode_produk = produk.kode_produk) AND (produk.kode_produk = '$kode_produk')
 					GROUP BY produk.kode_produk";
 			$result = mysqli_query($this->koneksi, $sql);
 			while ($row = mysqli_fetch_array($result)){
@@ -293,6 +294,9 @@
 						$hasil[] = $row;
 						break;
 
+					case "kode_order":
+						return $row['kode_order'];
+						break;
 					case "kode_akun":
 						return $row['Kode_akun'];
 						break;
