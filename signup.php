@@ -12,7 +12,7 @@
 	<div class="content daftar justify-content-between px-5" style="--bs-gutter-x: 0;">
 		<div class="row">
 			<div class="deskripsi col-sm-5 my-auto">
-				<h3 class="header">Kue Rumahan</h3>
+				<a href="index.php" style="text-decoration: none;"><h3 class="header">Kue Rumahan</h3></a>
 				<p class="subtitle">Gabung dan nikmati kemudahan Jual Beli Kue di Kue Rumahan</p>
 			</div>
 			

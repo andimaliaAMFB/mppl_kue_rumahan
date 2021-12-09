@@ -4,11 +4,7 @@
 
 	session_start();
 	if ((!isset($_SESSION['username'])) && (!isset($_SESSION['password'])) && (!isset($_SESSION['kode_akun']))  ) {
-	    $username = "";
-	    $password = "";
-	    $kode_akun = "";
-	    $date = date("Y-m-d H:i:s");
-	    // echo $date."<br>".date("Y-m-d H:i:s");
+	    header("Location:login.php");
 	}
 	else
 	{
@@ -136,7 +132,7 @@
 
 				  	<div class="row g-0">
 					    <div class="col-md-4">
-					      	<img src="..." class="img-fluid rounded-start" alt="...">
+					      	<img src="Asset/<?php echo $kode_produk ?>.jpg" class="img-fluid rounded-start imgProduk" alt="...">
 					    </div>
 					    <div class="col-md-8">
 					      	<div class="card-body justify-content-between align-items-center ">

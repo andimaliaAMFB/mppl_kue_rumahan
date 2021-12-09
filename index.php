@@ -47,11 +47,26 @@
 			<div class="header navbar-brand mb-0 h1"><a href="index.php">Kue Rumahan</a></div>
 			<ul>
 				<li>
-					<button class="btn">
-						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-						  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-						</svg>
-					</button>
+					<?php
+					if ($username == "") {
+						?>
+						<a href="login.php" class="btn">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+							  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+							</svg>
+						</a>
+						<?php
+					}
+					else{
+						?>
+						<a href="akun.php#order" class="btn">
+							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+							  <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+							</svg>
+						</a>
+						<?php
+					}
+					?>
 					
 				</li>
 
@@ -106,12 +121,8 @@
 					}
 					?>
 					<div class="card" style="cursor:pointer" onclick="location.href='produk.php?kode_produk=<?php echo $produkFull['Kode_Produk'] ?>'">
-					  <img src="..." class="card-img-top" alt="<?php echo $produkFull['Nama_Produk'] ?>">
-					  <p>Produk/<?php echo substr($produkFull['Kode_Produk'], 0,11)."/".$produkFull['Nama_Produk']?>.php</p>
+					  	<img src="Asset/<?php echo $produkFull['Kode_Produk'] ?>.jpg" class="card-img-top" alt="<?php echo $produkFull['Nama_Produk'] ?>">
 					</div>
-					<form action="" method="POST">
-						<input type="hidden" name="kode_order">
-					</form>
 					<?php
 					$i++;
 				}
@@ -127,9 +138,9 @@
 					<?php
 					foreach ($db->getProduk("popular") as $produk) {
 						?>
-					<div class="card mb-3 col " style="cursor:pointer" onclick="location.href='produk.php?kode_produk=<?php echo $produk['kode_produk'] ?>'">
-					  	<img src="Asset/<?php echo $produk['kode_produk']; ?>.jpg" class="card-img-top" alt="...">
-					  	<div class="card-body p-2">
+					<div class="card col px-0" style="cursor:pointer" onclick="location.href='produk.php?kode_produk=<?php echo $produk['kode_produk'] ?>'">
+					  	<img src="Asset/<?php echo $produk['kode_produk']; ?>.jpg" class="card-img-top  cardImg" alt="...">
+					  	<div class="card-body p-2 mb-3 align-items-center">
 						    <p class="card-text text-center"><?php echo $produk['nama']; ?></p>
 					  	</div>
 					</div>
@@ -155,8 +166,8 @@
 						break;
 					}
 					?>
-					<div class="card mb-3 col " style="cursor:pointer" onclick="location.href='produk.php?kode_produk=<?php echo $produkFull['Kode_Produk'] ?>'">
-					  	<img src="..." class="card-img-top" alt="<?php echo $produkFull['Nama_Produk'] ?>">
+					<div class="card mb-3 col px-0" style="cursor:pointer" onclick="location.href='produk.php?kode_produk=<?php echo $produkFull['Kode_Produk'] ?>'">
+					  	<img src="Asset/<?php echo $produkFull['Kode_Produk']; ?>.jpg" class="card-img-top" alt="<?php echo $produkFull['Nama_Produk'] ?>">
 					  	<div class="card-body p-2">
 						    <h5 class="mini-card card-title text-center"><b><?php echo $produkFull['Nama_Produk'] ?></b></h5>
 						    <hr>
