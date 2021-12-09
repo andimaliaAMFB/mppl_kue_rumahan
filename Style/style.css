@@ -16,6 +16,9 @@ body{
 .text-col4{
 	color: #FAF8FD;
 }
+.text-col5{
+	color: #C4C4C4;
+}
 .bg-col1{
 	background: #E2D1BF;
 }
@@ -27,6 +30,9 @@ body{
 }
 .bg-col4{
 	background-color: #FAF8FD;
+}
+.bg-col5{
+	background: #C4C4C4;
 }
 .white-border-b,
 .card.white-border-b,
@@ -92,6 +98,12 @@ hr.white-border,
 	color: #000;
 	background: #FAF8FD;
 }
+.btn.bg-col5,
+.btn.bg-col5.black-text,
+.btn.border-col5{
+	color: #FAF8FD;
+	background: #C4C4C4;
+}
 .btn.bg-col1.black-text{
 	color: #000;
 }
@@ -104,6 +116,9 @@ hr.white-border,
 .btn.bg-col4{
 	color: #000;
 	background: #FAF8FD;
+}
+.btn.bg-col5.black-text{
+	color: #000;
 }
 .btn.border-col1{
 	color: #E2D1BF;
@@ -119,6 +134,10 @@ hr.white-border,
 }
 .btn.border-col4{
 	color: #FAF8FD;
+	background: transparent;
+}
+.btn.border-col5{
+	color: #C4C4C4;
 	background: transparent;
 }
 .btn.konfirmasi{
