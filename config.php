@@ -388,5 +388,44 @@
 				echo "<script>alert('Woops! Something Wrong Went.')</script>";
 			}
 		}
+		function getOrderMember($kode_akun){
+			$sql = "SELECT orderkue.kode_order,
+						member.kode_member,
+						member.nama as username, 
+						produk.kode_produk,
+						produk.nama as nama_produk,
+						orderkuedetail.jumlahBeli,
+						produk.hargasatuan,
+						admin.nama_toko,
+						orderkue.waktu_pemesanan,
+						orderkue.waktu_pembayaran,
+						orderkue.status 
+					FROM ((((orderkuedetail INNER JOIN orderkue) INNER JOIN member) INNER JOIN admin) INNER JOIN produk) 
+					WHERE (orderkuedetail.kode_order = orderkue.kode_order) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (orderkue.kode_member = member.kode_member) AND (orderkuedetail.kode_produk = produk.kode_produk) AND (member.kode_member = '$kode_akun') 
+					ORDER BY orderkue.kode_order";
+			$result = mysqli_query($this->koneksi, $sql);
+			while ($row = mysqli_fetch_array($result)){
+				$hasil[] = $row;
+			}
+			return $hasil;
+		}
+		function getOrderAdmin($kode_akun){
+			$sql = "SELECT orderkue.kode_order, 
+							admin.kode_admin, 
+							produk.kode_produk,
+							produk.nama as nama_produk, 
+							produk.hargasatuan, 
+							orderkuedetail.jumlahBeli, 
+							orderkue.waktu_pemesanan, 
+							orderkue.waktu_pembayaran
+					FROM (((orderkuedetail INNER JOIN orderkue) INNER JOIN produk) INNER JOIN admin)
+					WHERE (orderkuedetail.kode_order = orderkue.kode_order) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (orderkuedetail.kode_produk = produk.kode_produk) AND (orderkuedetail.kode_admin = '$kode_akun')
+					GROUP BY orderkue.kode_order";
+			$result = mysqli_query($this->koneksi, $sql);
+			while ($row = mysqli_fetch_array($result)){
+				$hasil[] = $row;
+			}
+			return $hasil;
+		}
 	}
 ?>
