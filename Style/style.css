@@ -36,6 +36,30 @@ hr.white-border,
 	border-bottom: 1px solid #FAF8FD;
 	opacity: 1;
 }
+.white-border-t,
+.card.white-border-t,
+.kotak-header.white-border-t,
+hr.white-border,
+.content hr.white-border{
+	border-top: 1px solid #FAF8FD;
+	opacity: 1;
+}
+.white-border-l,
+.card.white-border-l,
+.kotak-header.white-border-l,
+hr.white-border,
+.content hr.white-border{
+	border-left: 1px solid #FAF8FD;
+	opacity: 1;
+}
+.white-border-r,
+.card.white-border-r,
+.kotak-header.white-border-r,
+hr.white-border,
+.content hr.white-border{
+	border-right: 1px solid #FAF8FD;
+	opacity: 1;
+}
 
 .btn, .btn.loginbtn,
 .btn.buybtn,
@@ -117,6 +141,17 @@ hr.white-border,
 	text-decoration: none;
 	color: #000000;
 }
+.header2{
+	font-family: Roboto;
+	font-style: normal;
+	font-weight: 500;
+	font-size: 24px;
+	line-height: 28px;
+	align-items: center;
+	text-align: center;
+
+	color: #000000;
+}
 .subtitle{
 	font-family: Roboto;
 	font-style: normal;
@@ -193,7 +228,7 @@ nav .helper ul li:not(:first-child){
 /*Content*/
 .content{
 	background: #FAF8FD;
-	padding: 30px 35px 15px 35px;
+	padding: 2rem 10rem 3rem 10rem;
 	min-height: 968px;
 }
 .content.daftar{
@@ -251,12 +286,17 @@ nav .helper ul li:not(:first-child){
 .content div .card{
 	overflow: hidden;
 	width: 20%;
-	height: 211px;
 	border-top-left-radius: 0;
 	border-top-Right-radius: 0;
 	border-bottom-left-radius: 10px;
 	border-bottom-Right-radius: 10px;
 	background-color:transparent;
+}
+.card-img, 
+.card-img-bottom, 
+.card-img-top{
+	height: 179.75px;
+
 }
 .content div .normal-card.card{
 	width: 100%;
@@ -318,4 +358,12 @@ nav .helper ul li:not(:first-child){
 }
 .log-akun ul li:not(:first-child){
 	border-left: 3px solid ;
+}
+.img-fluid.imgProduk{
+	width: 75%;
+	height: 201px;
+}
+.list-group .list-group-item{
+	background-color: transparent;
+	border: none;
 }
