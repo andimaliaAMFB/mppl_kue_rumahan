@@ -133,7 +133,7 @@
 						break;
 					}
 					?>
-					<div class="card" style="cursor:pointer;" onclick="location.href='produk.php?kode_produk=<?php echo $produkFull['Kode_Produk'] ?>'">
+					<div class="card align" style="cursor:pointer;" onclick="location.href='produk.php?kode_produk=<?php echo $produkFull['Kode_Produk'] ?>'">
 					  	<img src="Asset/<?php echo $produkFull['Kode_Produk'] ?>.jpg" class="card-img-top" alt="<?php echo $produkFull['Nama_Produk'] ?>" style="height: 450px;">
 					</div>
 					<?php

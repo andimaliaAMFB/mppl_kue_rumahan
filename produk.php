@@ -187,16 +187,50 @@
 	</nav>
 
 	<?php 
-  	foreach ($db->getProdukSpesifik($kode_produk,"all") as $produk) {
-  		$Nama_Produk = $produk['Nama_Produk'];
-  		$stok = $produk['stok'];
-  		$harga = $produk['hargasatuan'];
-  		$populer = $produk['populer'];
-  		$bykdibeli = $produk['banyakDiBeli'];
+	$kode_order = $db->getProdukSpesifik($kode_produk,true,"kode_order");
+	if ($kode_order == "") {
+	  	// echo "<script>alert('$ kode_order value = ".$kode_order."')</script>";
 
-  		$Nama_Toko = $produk['nama_toko'];
-  		$alamat = $produk['alamat'];
-  	}
+		foreach ($db->getProdukSpesifik($kode_produk,false,"all") as $produk) {
+			$kode_order = "X";
+
+			$Nama_Produk = $produk['Nama_Produk'];
+			$stok = $produk['stok'];
+	  		$deskripsi = $produk['deskripsi'];
+	  		$berat = $produk['berat'];
+	  		$kondisi = $produk['kondisi'];
+	  		$kadaluarsa = $produk['kadaluarsa'];
+			$harga = $produk['hargasatuan'];
+			$bykdibeli = 0;
+
+			$Nama_Toko = $produk['nama_toko'];
+			$alamat = $produk['alamat'];
+		}
+	}
+	else
+	{
+		foreach ($db->getProdukSpesifik($kode_produk,true,"all") as $produk) {
+	  		$Nama_Produk = $produk['Nama_Produk'];
+	  		$stok = $produk['stok'];
+	  		$deskripsi = $produk['deskripsi'];
+	  		$berat = $produk['berat'];
+	  		$kondisi = $produk['kondisi'];
+	  		$kadaluarsa = $produk['kadaluarsa'];
+	  		$harga = $produk['hargasatuan'];
+	  		$populer = $produk['populer'];
+	  		$bykdibeli = $produk['banyakDiBeli'];
+
+	  		$Nama_Toko = $produk['nama_toko'];
+	  		$alamat = $produk['alamat'];
+
+	  		if ($kondisi == "") {
+	  			$kondisi = "-";
+	  		}
+	  		if ($deskripsi == "") {
+	  			$deskripsi = "---  Description About Product Can't Found  ---";
+	  		}
+	  	}
+	}
   	?>
 	<div class="content produk">
 		<div class="deskripsi utama bg-col1 p-3">
@@ -245,8 +279,8 @@
 				  	</div>
 				</div>
 			</div>
-			<div class="toko-chat">
-				<div class="row white-border-b px-3 mb-0">
+			<div class="toko-chat white-border-b  mb-3">
+				<div class="row px-3 mb-3">
 					<div class="d-flex col-md-4 py-1 align-items-center">
 						<div class="me-3 h-100 my-auto">
 							<svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-shop h-100" viewBox="0 0 16 16">
@@ -278,25 +312,25 @@
 					<div class="log-akun">
 						<ul class="nav nav-tabs">
 						  	<li class="nav-item">
-						  		<b><a class="linkdaftar nav-link active" aria-current="page" id="DetailLog" onclick="DeskripsiLog()">Detail</a></b>
+						  		<b><a class="linkdaftar nav-link active" aria-current="page" id="DetailLog" onclick="DetailLog()" style="cursor:pointer">Detail</a></b>
 						    	
 						  	</li>
 						  	<li class="nav-item">
-						  		<b><a class="linkdaftar nav-link" id="DeskripsiLog" onclick="DetailLog()">Deskripsi</a></b>
+						  		<b><a class="linkdaftar nav-link" id="DeskripsiLog" onclick="DeskripsiLog()" style="cursor:pointer">Deskripsi</a></b>
 						    	
 						  	</li>
 						</ul>
 					</div>
 				</div>
-				<div class="px-3 pt-3">
+				<div class="px-3 pt-3" id="detailMenu">
 					<table class="table table-borderless ">
 						<tr>
 							<td>Kondisi</td>
-							<td><b></b></td>
+							<td><b><?php echo $kondisi ?></b></td>
 						</tr>
 						<tr>
 							<td>Masa Penyimpanan</td>
-							<td><b></b></td>
+							<td><b><?php echo $kadaluarsa ?></b></td>
 						</tr>
 						<tr>
 							<td>Stok</td>
@@ -304,13 +338,16 @@
 						</tr>
 						<tr>
 							<td>Minimum Jumlah Pembelian</td>
-							<td><b></b></td>
+							<td><b>-</b></td>
 						</tr>
 						<tr>
 							<td>Dikirim Dari</td>
-							<td style="min-width: 400px;"><b></b></td>
+							<td style="min-width: 400px;"><b><?php echo $alamat ?></b></td>
 						</tr>
 					</table>
+				</div>
+				<div class="px-3 pt-3" id="deskripsiMenu" style="display:none;">
+					<h4 class="header2 p-3" style="font-size:20px;"><?php echo $deskripsi ?></h4>
 				</div>
 			</div>
 		</div>
@@ -369,11 +406,15 @@
 
 <script>
 	function DetailLog(){
-		document.getElementById('DetailLog').classList.remove("active");
-		document.getElementById('DeskripsiLog').classList.add("active");
-	}
-	function DeskripsiLog(){
 		document.getElementById('DetailLog').classList.add("active");
 		document.getElementById('DeskripsiLog').classList.remove("active");
+		document.getElementById('detailMenu').style.display = "block";
+		document.getElementById('deskripsiMenu').style.display = "none";
+	}
+	function DeskripsiLog(){
+		document.getElementById('DetailLog').classList.remove("active");
+		document.getElementById('DeskripsiLog').classList.add("active");
+		document.getElementById('detailMenu').style.display = "none";
+		document.getElementById('deskripsiMenu').style.display = "block";
 	}
 </script>

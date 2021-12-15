@@ -45,12 +45,33 @@
 
 		// echo "<script>alert('".$username.", ".$password.", ".$kode_akun."')</script>";
 		if ($username != "") {
-			$kode_kategori = $db->getProdukSpesifik($kode_produk,"kode_kategori");
-			$kode_penjual = $db->getProdukSpesifik($kode_produk,"kode_akun");
-			$nama = $db->getProdukSpesifik($kode_produk,"nama");
-			$stok = $db->getProdukSpesifik($kode_produk,"stok");
-			$hargasatuan = $db->getProdukSpesifik($kode_produk,"harga");
-			$kadaluarsa = $db->getProdukSpesifik($kode_produk,"kadaluarsa");
+			$kode_order = $db->getProdukSpesifik($kode_produk,true,"kode_order");
+			if ($kode_order == "") {
+				// echo "<script>alert('$ kode_order value = ".$kode_order."')</script>";
+
+				foreach ($db->getProdukSpesifik($kode_produk,false,"all") as $produk) {
+					$kode_kategori = $db->getProdukSpesifik($kode_produk,false,"kode_kategori");
+					$kode_penjual = $db->getProdukSpesifik($kode_produk,false,"kode_akun");
+					$nama = $db->getProdukSpesifik($kode_produk,false,"nama");
+					$stok = $db->getProdukSpesifik($kode_produk,false,"stok");
+					$hargasatuan = $db->getProdukSpesifik($kode_produk,false,"harga");
+					$kadaluarsa = $db->getProdukSpesifik($kode_produk,false,"kadaluarsa");
+				}
+			}
+			else
+			{
+				foreach ($db->getProdukSpesifik($kode_produk,true,"all") as $produk) {
+					$kode_order = $produk['kode_order'];
+
+					$kode_kategori = $db->getProdukSpesifik($kode_produk,true,"kode_kategori");
+					$kode_penjual = $db->getProdukSpesifik($kode_produk,true,"kode_akun");
+					$nama = $db->getProdukSpesifik($kode_produk,true,"nama");
+					$stok = $db->getProdukSpesifik($kode_produk,true,"stok");
+					$hargasatuan = $db->getProdukSpesifik($kode_produk,true,"harga");
+					$kadaluarsa = $db->getProdukSpesifik($kode_produk,true,"kadaluarsa");
+				}
+			}
+			
 			$jam_pembayaran = date('Y-m-d H:i:s', strtotime($jam_transaksi. ' + 2 days'));
 			$jam_transaksi = $_SESSION['jam_transaksi'];
 			$jumlah_beli = $_SESSION['jumlah_beli'];
@@ -91,18 +112,37 @@
 <body>
 
 	<?php 
-  	foreach ($db->getProdukSpesifik($kode_produk,"all") as $produk) {
-  		$kode_order = $produk['kode_order'];
+	$kode_order = $db->getProdukSpesifik($kode_produk,true,"kode_order");
+	if ($kode_order == "") {
+		// echo "<script>alert('$ kode_order value = ".$kode_order."')</script>";
 
-  		$Nama_Produk = $produk['Nama_Produk'];
-  		$stok = $produk['stok'];
-  		$harga = $produk['hargasatuan'];
-  		$populer = $produk['populer'];
-  		$bykdibeli = $produk['banyakDiBeli'];
+		foreach ($db->getProdukSpesifik($kode_produk,false,"all") as $produk) {
+			$kode_order = "X";
 
-  		$Nama_Toko = $produk['nama_toko'];
-  		$alamat = $produk['alamat'];
-  	}
+			$Nama_Produk = $produk['Nama_Produk'];
+			$stok = $produk['stok'];
+			$harga = $produk['hargasatuan'];
+			$bykdibeli = 0;
+
+			$Nama_Toko = $produk['nama_toko'];
+			$alamat = $produk['alamat'];
+		}
+	}
+	else
+	{
+		foreach ($db->getProdukSpesifik($kode_produk,true,"all") as $produk) {
+			$kode_order = $produk['kode_order'];
+
+			$Nama_Produk = $produk['Nama_Produk'];
+			$stok = $produk['stok'];
+			$harga = $produk['hargasatuan'];
+			$populer = $produk['populer'];
+			$bykdibeli = $produk['banyakDiBeli'];
+
+			$Nama_Toko = $produk['nama_toko'];
+			$alamat = $produk['alamat'];
+		}
+	}
   	?>
 
 	<nav class="navbar justify-content-start align-items-center">

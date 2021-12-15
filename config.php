@@ -271,23 +271,46 @@
 					}
 				}
 
-				function getProdukSpesifik($kode_produk,$typecek){
-					$sql = "SELECT orderkuedetail.kode_order,
-									kategori.nama as Nama_Kategori,
-									admin.kode_admin as Kode_akun,
-									admin.alamat,
-									produk.kode_produk as Kode_Produk, 
-									produk.nama as Nama_Produk,
-									produk.kode_kategori, 
-									produk.stok,
-									produk.hargasatuan,
-		    						produk.kadaluarsa,
-									admin.nama_toko,
-					    			COUNT(orderkuedetail.kode_produk) AS populer,
-					    			SUM(orderkuedetail.jumlahBeli) AS banyakDiBeli
-							FROM ((orderkuedetail INNER JOIN produk) INNER JOIN admin) INNER JOIN kategori
-							WHERE (produk.kode_kategori = kategori.kode_kategori) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (orderkuedetail.kode_produk = produk.kode_produk) AND (produk.kode_produk = '$kode_produk')
-							GROUP BY produk.kode_produk";
+				function getProdukSpesifik($kode_produk,$ordered,$typecek){
+					if($ordered){
+						$sql = "SELECT orderkuedetail.kode_order,
+										kategori.nama as Nama_Kategori,
+										admin.kode_admin as Kode_akun,
+										admin.alamat,
+										produk.kode_produk as Kode_Produk, 
+										produk.nama as Nama_Produk,
+										produk.kode_kategori, 
+										produk.deskripsi, 
+										produk.stok,
+										produk.hargasatuan,
+										produk.berat, 
+										produk.kondisi, 
+			    						produk.kadaluarsa,
+										admin.nama_toko,
+						    			COUNT(orderkuedetail.kode_produk) AS populer,
+						    			SUM(orderkuedetail.jumlahBeli) AS banyakDiBeli
+								FROM ((orderkuedetail INNER JOIN produk) INNER JOIN admin) INNER JOIN kategori
+								WHERE (produk.kode_kategori = kategori.kode_kategori) AND (orderkuedetail.kode_admin = admin.kode_admin) AND (orderkuedetail.kode_produk = produk.kode_produk) AND (produk.kode_produk = '$kode_produk')
+								GROUP BY produk.kode_produk";
+					}
+					else{
+						$sql = "SELECT kategori.nama as Nama_Kategori,
+										admin.kode_admin as Kode_akun,
+										admin.alamat,
+										produk.kode_produk as Kode_Produk, 
+										produk.nama as Nama_Produk,
+										produk.kode_kategori, 
+										produk.deskripsi, 
+										produk.stok,
+										produk.hargasatuan,
+										produk.berat, 
+										produk.kondisi, 
+			    						produk.kadaluarsa,
+										admin.nama_toko
+								FROM ((kategori INNER JOIN produk) INNER JOIN admin)
+								WHERE (produk.kode_kategori = kategori.kode_kategori) AND (produk.kode_produk = '$kode_produk')
+								GROUP BY produk.kode_produk";
+					}
 					$result = mysqli_query($this->koneksi, $sql);
 					while ($row = mysqli_fetch_array($result)){
 						switch ($typecek) {
@@ -307,6 +330,9 @@
 							case "kode_kategori":
 								return $row['kode_kategori'];
 								break;
+							case "deskripsi":
+								return $row['deskripsi'];
+								break;
 							case "nama":
 								return $row['Nama_Produk'];
 								break;
@@ -315,6 +341,12 @@
 								break;
 							case "harga":
 								return $row['hargasatuan'];
+								break;
+							case "berat":
+								return $row['berat'];
+								break;
+							case "kondisi":
+								return $row['kondisi'];
 								break;
 							case "kadaluarsa":
 								return $row['kadaluarsa'];

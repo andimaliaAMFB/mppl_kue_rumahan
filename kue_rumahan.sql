@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 15 Des 2021 pada 03.07
+-- Waktu pembuatan: 15 Des 2021 pada 08.24
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.4.10
 
@@ -234,7 +234,9 @@ INSERT INTO `orderkue` (`kode_order`, `waktu_pemesanan`, `waktu_pembayaran`, `ko
 (126, '2021-12-07 23:57:01', '2021-12-08 23:25:01', 'M-2021-12-02-2', 'Sedang Diantar', '', 'Yogyakarta'),
 (127, '2021-12-08 00:02:48', '2021-12-11 00:02:48', 'M-2021-12-02-2', 'Sedang Diantar', '', 'Bandung'),
 (128, '2021-12-08 00:06:05', '2021-12-10 00:06:05', 'M-2021-12-02-3', 'Sedang Diantar', '', 'Tangerang'),
-(129, '2021-12-07 17:46:42', '2021-12-09 17:46:45', 'M-2021-12-02-1', 'Sedang Diantar', '', '');
+(129, '2021-12-07 17:46:42', '2021-12-09 17:46:45', 'M-2021-12-02-1', 'Sedang Diantar', '', ''),
+(130, '2021-12-15 07:48:30', '2021-12-17 07:50:19', 'M-2021-12-02-4', 'Sedang Diantar', '', 'Bandung'),
+(131, '2021-12-15 08:17:19', '2021-12-17 08:17:23', 'M-2021-12-02-4', 'Sedang Diantar', '', 'Bandung');
 
 -- --------------------------------------------------------
 
@@ -280,7 +282,8 @@ INSERT INTO `orderkuedetail` (`kode_order`, `kode_produk`, `kode_admin`, `jumlah
 (127, 'A211203-2_4', 'A-2021-12-03-2', 3, '3500.00'),
 (128, 'A211203-1_4', 'A-2021-12-03-1', 5, '3500.00'),
 (129, 'A211203-1_5', 'A-2021-12-03-1', 5, '4500.00'),
-(112, 'A211203-2_3', 'A-2021-12-03-2', 6, '3500.00');
+(112, 'A211203-2_3', 'A-2021-12-03-2', 6, '3500.00'),
+(131, 'A211203-1_6', 'A-2021-12-03-1', 2, '32500.00');
 
 -- --------------------------------------------------------
 
@@ -310,7 +313,7 @@ INSERT INTO `produk` (`kode_produk`, `kode_kategori`, `nama`, `deskripsi`, `harg
 ('A211203-1_3', '19053100', 'Biskuit haha', NULL, '3500.00', NULL, NULL, 42, '2022-03-18'),
 ('A211203-1_4', '19053120', 'Biskuit cokelat haha', NULL, '3500.00', NULL, NULL, 45, '2022-03-20'),
 ('A211203-1_5', '19059040', 'Kue keju haha', NULL, '4500.00', NULL, NULL, 55, '2022-03-15'),
-('A211203-1_6', '19059040', 'Lidah Kucing haha', 'kue kering yang memiliki bentuk yang mirip seperti lidah kucing (panjang dan tipis) yang berasal dari Belanda. Kue lidah kucing memiliki rasa yang enak, gurih dan renyah. Kue ini masuk ke Indonesia dari Belanda seiring dengan kolonialisasi Belanda.', '32500.00', '195 gram', 'baru', 20, '3 bulan'),
+('A211203-1_6', '19059040', 'Lidah Kucing haha', 'kue kering yang memiliki bentuk yang mirip seperti lidah kucing (panjang dan tipis) yang berasal dari Belanda. Kue lidah kucing memiliki rasa yang enak, gurih dan renyah. Kue ini masuk ke Indonesia dari Belanda seiring dengan kolonialisasi Belanda.', '32500.00', '195 gram', 'baru', 18, '3 bulan'),
 ('A211203-2_1', '19050000', 'Roti haha', NULL, '7000.00', NULL, NULL, 20, '2022-03-04'),
 ('A211203-2_2', '19051000', 'Roti Kering haha', NULL, '3000.00', NULL, NULL, 30, '2022-04-10'),
 ('A211203-2_3', '19053100', 'Biskuit haha', NULL, '3500.00', NULL, NULL, 50, '2022-03-18'),
@@ -401,7 +404,7 @@ ALTER TABLE `cek`
 -- AUTO_INCREMENT untuk tabel `orderkue`
 --
 ALTER TABLE `orderkue`
-  MODIFY `kode_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `kode_order` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=132;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
