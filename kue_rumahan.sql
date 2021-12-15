@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 09 Des 2021 pada 15.45
+-- Waktu pembuatan: 15 Des 2021 pada 03.07
 -- Versi server: 10.4.14-MariaDB
 -- Versi PHP: 7.4.10
 
@@ -292,26 +292,30 @@ CREATE TABLE `produk` (
   `kode_produk` varchar(20) NOT NULL,
   `kode_kategori` varchar(20) DEFAULT NULL,
   `nama` varchar(30) NOT NULL,
-  `stok` int(11) NOT NULL,
+  `deskripsi` text DEFAULT NULL,
   `hargasatuan` decimal(7,2) NOT NULL,
-  `kadaluarsa` date NOT NULL
+  `berat` varchar(255) DEFAULT NULL,
+  `kondisi` varchar(255) DEFAULT NULL,
+  `stok` int(11) NOT NULL,
+  `kadaluarsa` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data untuk tabel `produk`
 --
 
-INSERT INTO `produk` (`kode_produk`, `kode_kategori`, `nama`, `stok`, `hargasatuan`, `kadaluarsa`) VALUES
-('A211203-1_1', '19050000', 'Roti haha', 16, '7000.00', '2022-03-04'),
-('A211203-1_2', '19051000', 'Roti Kering haha', 28, '3000.00', '2022-04-10'),
-('A211203-1_3', '19053100', 'Biskuit haha', 42, '3500.00', '2022-03-18'),
-('A211203-1_4', '19053120', 'Biskuit cokelat haha', 45, '3500.00', '2022-03-20'),
-('A211203-1_5', '19059040', 'Kue keju haha', 55, '4500.00', '2022-03-15'),
-('A211203-2_1', '19050000', 'Roti haha', 20, '7000.00', '2022-03-04'),
-('A211203-2_2', '19051000', 'Roti Kering haha', 30, '3000.00', '2022-04-10'),
-('A211203-2_3', '19053100', 'Biskuit haha', 50, '3500.00', '2022-03-18'),
-('A211203-2_4', '19053120', 'Biskuit cokelat haha', 45, '3500.00', '2022-03-20'),
-('A211203-2_5', '19059040', 'Kue keju haha', 60, '4500.00', '2022-03-15');
+INSERT INTO `produk` (`kode_produk`, `kode_kategori`, `nama`, `deskripsi`, `hargasatuan`, `berat`, `kondisi`, `stok`, `kadaluarsa`) VALUES
+('A211203-1_1', '19050000', 'Roti haha', NULL, '7000.00', NULL, NULL, 16, '2022-03-04'),
+('A211203-1_2', '19051000', 'Roti Kering haha', NULL, '3000.00', NULL, NULL, 28, '2022-04-10'),
+('A211203-1_3', '19053100', 'Biskuit haha', NULL, '3500.00', NULL, NULL, 42, '2022-03-18'),
+('A211203-1_4', '19053120', 'Biskuit cokelat haha', NULL, '3500.00', NULL, NULL, 45, '2022-03-20'),
+('A211203-1_5', '19059040', 'Kue keju haha', NULL, '4500.00', NULL, NULL, 55, '2022-03-15'),
+('A211203-1_6', '19059040', 'Lidah Kucing haha', 'kue kering yang memiliki bentuk yang mirip seperti lidah kucing (panjang dan tipis) yang berasal dari Belanda. Kue lidah kucing memiliki rasa yang enak, gurih dan renyah. Kue ini masuk ke Indonesia dari Belanda seiring dengan kolonialisasi Belanda.', '32500.00', '195 gram', 'baru', 20, '3 bulan'),
+('A211203-2_1', '19050000', 'Roti haha', NULL, '7000.00', NULL, NULL, 20, '2022-03-04'),
+('A211203-2_2', '19051000', 'Roti Kering haha', NULL, '3000.00', NULL, NULL, 30, '2022-04-10'),
+('A211203-2_3', '19053100', 'Biskuit haha', NULL, '3500.00', NULL, NULL, 50, '2022-03-18'),
+('A211203-2_4', '19053120', 'Biskuit cokelat haha', NULL, '3500.00', NULL, NULL, 45, '2022-03-20'),
+('A211203-2_5', '19059040', 'Kue keju haha', NULL, '4500.00', NULL, NULL, 60, '2022-03-15');
 
 --
 -- Indexes for dumped tables

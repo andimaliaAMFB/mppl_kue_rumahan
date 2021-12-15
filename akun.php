@@ -21,6 +21,74 @@
 	}
 	$menu_akun = substr($_SERVER['REQUEST_URI'], 31,8);
 	$ongkir = 5000;
+	$imageIn = false;
+
+	if (isset($_POST['add'])) {
+		$nama = $_POST['nama'];
+		$deskripsi = $_POST['deskripsi'];
+		$harga = $_POST['harga'];
+		$kategori = $_POST['kategori'];
+		$berat = $_POST['berat']." ".$_POST['beratsatuan'];
+		$beratsatuan = $_POST['beratsatuan'];
+		$kondisi = $_POST['kondisi'];
+		$stok = $_POST['stok'];
+		$simpan = $_POST['masasimpan']." ".$_POST['simpan'];
+		$simpansatuan = $_POST['simpan'];
+
+		if (($kategori != "") || ($beratsatuan != "") || ($simpansatuan != "")) {
+			// get base acoount product
+			$produkAkun = substr($kode_akun, 0, 1).substr($kode_akun, 4, 2).substr($kode_akun, 7, 2).substr($kode_akun, 10, 4);
+			
+			// get last id produk of this admin
+			$lastIdProduct = $db->getProdukLastId($kode_akun) + 1;
+			// echo "<script>alert('CurrentId of Product is ".$lastIdProduct."')</script>";
+
+			$kode_produk = $produkAkun."_".$lastIdProduct;
+
+			// input new Product Data
+			// echo "<script>alert('INSERT INTO `produk`(`kode_produk`, `kode_kategori`, `nama`, `deskripsi`, `hargasatuan`, `berat`, `kondisi`, `stok`, `kadaluarsa`) VALUES (".$kode_produk.",".$kategori.",".$nama.",".$deskripsi.",".$harga.",".$berat.",".$kondisi.",".$stok.",".$simpan.")')</script>";
+			$db->insertProduk($kode_produk,$kategori,$nama,$deskripsi,$harga,$berat,$kondisi,$stok,$simpan);
+
+			// save uploaded image
+			if (isset($_FILES['imageup'])) {
+				$img  = $_FILES['imageup'];
+
+				$imgName = $_FILES['imageup']['name'];
+				$imgType = $_FILES['imageup']['type'];
+				$imgTmp = $_FILES['imageup']['tmp_name'];
+				$imgError = $_FILES['imageup']['error'];
+				$imgSize = $_FILES['imageup']['size'];
+
+				$imgExt = explode(".", $imgName);
+				$imgExtension = strtolower(end($imgExt));
+
+				$allowExt = array('jpg');
+				if (in_array($imgExtension, $allowExt)) {
+					if ($imgError === 0 ) {
+						$imgTruename = $kode_produk.".".$imgExtension;
+						$destination = 'Asset/'.$imgTruename;
+						echo $destination."/".$imgTruename;
+						move_uploaded_file($imgTmp, $destination);
+						header("Location: akun.php?akun_menu=add#uploadDatasuccess");
+					}
+					else
+					{
+						echo "Error in Upload";
+					}
+				}
+				else
+				{
+					echo "Cant Upload This Type";
+				}
+			}
+			else{
+				echo "<script>alert('There no File Uploaded')</script>";
+			}
+		}
+		else{
+			echo "<script>alert('kategori Can't Blank or ".$kategori."<br>Satuan Berat Can't Blank or ".$beratsatuan."<br>Satuan Lama Simpan Can't Blank or ".$simpansatuan."')</script>";
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html>
@@ -152,336 +220,448 @@
 		    
 		    <?php
 		    switch ($menu_akun) {
-		    	case "toko":
-		    		?>
-		    		    <div class="col-md-9" id="toko">
-		    			    <div>
-		    			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-		    			     		<h3 class="header2 text-start">Toko Saya</h3>
-		    			     	</div>
-		    			    </div>
-		    		  	</div>
-		    		  	<?php
-		    		break;
-		    	case "add":
-		    		?>
-	    		        <div class="col-md-9" id="add">
-	    		    	    <div>
-	    		    	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-	    		    	     		<h3 class="header2 text-start">Tambah Produk Baru</h3>
-	    		    	     	</div>
-	    		    	    </div>
-	    		      	</div>
-		    		  	<?php
-		    		break;
-		    	
-		    	case "sell":
-		    		?>
-	    		            <div class="col-md-9" id="sell"=>
+		    	// adminMenu
+			    	case "toko":
+			    		?>
+			    		    <div class="col-md-9" id="toko">
+			    			    <div>
+			    			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+			    			     		<h3 class="header2 text-start">Toko Saya</h3>
+			    			     	</div>
+			    			    </div>
+			    		  	</div>
+			    		  	<?php
+			    		break;
+			    	case "add":
+			    		?>
+		    		        <div class="col-md-9" id="add">
+		    		    	    <div>
+		    		    	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+		    		    	     		<h3 class="header2 text-start">Tambah Produk Baru</h3>
+		    		    	     	</div>
+		    		    	     	<div class="card-body">
+
+		    		    	     		<form action="" method="POST" enctype="multipart/form-data">
+		    		    	     			<!-- add button -->
+		    		    	     			<div class="mb-2 p-3 white-border-b img-u d-flex align-items-end" id="addPic">
+		    		    	     				<label for="img-input" class="btn">
+		    		    	     					<img id="uploadedIMG" src="Asset/add icon.png" style="max-width:10rem; max-height: 10rem;">
+		    		    	     				</label>
+		    		    	     				<input class="form-file" id="img-input" type="file" name="imageup" style="display:none; visibility: none;" onchange="getImage(this.value); priviewImage();" required/>
+		    		    	     				<div class="mb-1 subtitle" id="displayImagePath">File Path: </div>
+			    		    	     		</div>
+
+			    		    	     		<!-- add nama -->
+			    		    	     		<div class="mb-2 bg-col6 p-3">
+			    		    	     			<label class="form-label" for="nama">Nama Produk*</label>
+			    		    	     			<input class="form-control" style="background-color:#AF937C; border:none;" type="text" name="nama" id="nama" required>
+			    		    	     		</div>
+
+			    		    	     		<!-- add deskripsi -->
+			    		    	     		<div class="mb-2 bg-col6 p-3">
+			    		    	     			<label class="form-label" for="deskripsi">Deskripsi Produk*</label>
+			    		    	     			<input class="form-control" style="background-color:#AF937C; border:none;" type="text" name="deskripsi" id="deskripsi" required>
+			    		    	     		</div>
+
+			    		    	     		<!-- add harga -->
+			    		    	     		<div class="mb-2 bg-col6 p-3 d-flex justify-content-between">
+			    		    	     			<label class="col-sm-2 col-form-label" for="harga">Harga*</label>
+			    		    	     			<div class="col-sm-4 row align-items-center me-3">
+			    		    	     				<p class="col-sm-4 my-2">Rp.</p>
+			    		    	     				<input class="col form-control text-end" style="background-color:#AF937C; border:none;" type="number" name="harga" id="harga" min=0 required>
+			    		    	     			</div>
+			    		    	     		</div>
+
+			    		    	     		<!-- detail barang -->
+			    		    	     		<div class="mb-2 bg-col6 p-3 ">
+
+			    		    	     		<!-- kategori -->
+			    		    	     			<div class="d-flex justify-content-between">
+			    		    	     				<label class="col-sm-2 col-form-label" for="kategori">Kategori*</label>
+				    		    	     			<div class="col-sm-4 row align-items-center me-3">
+					    		    	     			<select class="form-select text-center"style="background-color:transparent; border:none;" type="text" name="kategori"  aria-label="Default select example" required>
+					    		    	     			  <option selected value="">Pilih</option>
+					    		    	     			  <?php
+														  foreach ($db->getKategori() as $kategori) {
+														  	?>
+														  	<option name="kategori" id="<?php echo $kategori['kode_kategori']?>" value="<?php echo $kategori['kode_kategori']?>"><?php echo $kategori['nama']?></option>
+														  	<?php
+														  }
+														  ?>
+					    		    	     			</select>
+			    		    	     				</div>
+			    		    	     			</div>
+
+			    		    	     			<!-- add berat -->
+			    		    	     			<div class="d-flex justify-content-between">
+			    		    	     				<label class="col-sm-2 col-form-label" for="berat">Berat*</label>
+				    		    	     			<div class="col-sm-4 row align-items-center me-3">
+				    		    	     				<input class="col form-control text-end" style="background-color:#AF937C; border:none;" type="number" name="berat" id="harga" min=0 required>
+				    		    	     				<select class="form-select col-sm-5 text-start"style="background-color:transparent; border:none;" type="text" name="beratsatuan"  aria-label="Default select example" required>
+				    		    	     					<option selected value="">Satuan</option>
+				    		    	     					<option name="beratsatuan" id="gram" value="gram">Gram</option>
+				    		    	     					<option name="beratsatuan" id="kgram" value="kgram">Kilo Gram</option>
+				    		    	     					<option name="beratsatuan" id="ons" value="ons">Ons</option>
+				    		    	     				</select>
+				    		    	     			</div>
+			    		    	     			</div>
+
+			    		    	     			<!-- add kondisi -->
+			    		    	     			<div class="d-flex justify-content-between">
+			    		    	     				<label class="col-sm-2 col-form-label" for="kondisi">Kondisi*</label>
+				    		    	     			<div class="col-sm-4 row align-items-center me-3">
+					    		    	     			<select class="form-select text-center"style="background-color:transparent; border:none;" type="text" name="kondisi"  aria-label="Default select example" required>
+					    		    	     			  	<option selected value="">Pilih</option>
+														  	<option name="kondisi" id="baru" value="baru">Baru</option>
+					    		    	     			</select>
+			    		    	     				</div>
+			    		    	     			</div>
+
+			    		    	     			<!-- add stok -->
+			    		    	     			<div class="d-flex justify-content-between">
+			    		    	     				<label class="col-sm-2 col-form-label" for="stok">Stok*</label>
+				    		    	     			<div class="col-sm-4 row align-items-center me-3 tex">
+				    		    	     				<input class="col bg-col2 form-control text-end" style="background-color:#AF937C; border:none;" type="number" name="stok" id="stok" min=0 required>
+				    		    	     			</div>
+			    		    	     			</div>
+
+			    		    	     			<!-- add masa simpan -->
+			    		    	     			<div class="d-flex justify-content-between">
+			    		    	     				<label class="col-sm-2 col-form-label" for="simpan">Masa Simpan*</label>
+				    		    	     			<div class="col-sm-4 row align-items-center me-3">
+				    		    	     				<input class="col bg form-control text-end" style="background-color:#AF937C; border:none;" type="number" name="masasimpan" id="masasimpan" min=0 required>
+				    		    	     				<select class="form-select col-sm-5 text-start"style="background-color:transparent; border:none;" type="text" name="simpan"  aria-label="Default select example" required>
+				    		    	     					<option selected>Lama</option>
+				    		    	     					<option name="simpan.simpan" id="hari" value="hari">Hari</option>
+				    		    	     					<option name="simpan.simpan" id="minggu" value="minggu">Minggu</option>
+				    		    	     					<option name="simpan.simpan" id="bulan" value="bulan">Bulan</option>
+				    		    	     				</select>
+				    		    	     			</div>
+			    		    	     			</div>
+
+			    		    	     		</div>
+			    		    	     		
+
+			    		    	     		<!-- button -->
+			    		    	     		<div class="mx-5 my-3 d-flex justify-content-center">
+			    		    	     			<button class="btn bg-col2 rounded-3 me-3" type="submit" name="add">ٍSimpan</button>
+			    		    	     			<button class="btn bg-col5 rounded-3" type="reset" name="reset">Batal</button>
+			    		    	     		</div>
+		    		    	     		</form>
+		    		    	     	</div>
+		    		    	    </div>
+		    		      	</div>
+			    		  	<?php
+			    		break;
+			    	
+			    	case "sell":
+			    		?>
+		    		            <div class="col-md-9" id="sell"=>
+		    		        	    <div>
+		    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+		    		        	     		<h3 class="header2 text-start">Penjualan Saya</h3>
+		    		        	     	</div>
+		    		        	     	<div class="card-header" style="background-color:transparent; border: none;">
+		    		        	     		<div class="m-3 d-flex justify-content-center align-items-center px-5">
+		 					     				<ul class="nav nav-tabs" id="myTab">
+		 					     				  	<li class="nav-item">
+		 					     				  		<b><a class="linkdaftar nav-link active" aria-current="page" id="kemas" href="#" onclick="kemasOn()">
+		 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
+			     					     					  	<path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
+			     					     					</svg>
+			     					     					<p class="text-center">Dikemas</p>
+		 					     				  		</a></b>
+		 					     				    	
+		 					     				  	</li>
+		 					     				  	<li class="nav-item">
+		 					     				  		<b><a class="linkdaftar nav-link" id="kirim" href="#" onclick="kirimOn()">
+		 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
+		 					     				  			  	<path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
+		 					     				  			</svg>
+			     					     					<p class="text-center">Dikirim</p>
+		 					     				  		</a></b>
+		 					     				    	
+		 					     				  	</li>
+		 					     				  	<li class="nav-item">
+		 					     				  		<b><a class="linkdaftar nav-link text-center" aria-current="page" id="batal" href="#" onclick="batalOn()">
+		 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-bag-x-fill" viewBox="0 0 16 16">
+		 					     				  			  <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM6.854 8.146a.5.5 0 1 0-.708.708L7.293 10l-1.147 1.146a.5.5 0 0 0 .708.708L8 10.707l1.146 1.147a.5.5 0 0 0 .708-.708L8.707 10l1.147-1.146a.5.5 0 0 0-.708-.708L8 9.293 6.854 8.146z"/>
+		 					     				  			</svg>
+			     					     					<p class="text-center">Dibatalkan</p>
+		 					     				  		</a></b>
+		 					     				    	
+		 					     				  	</li>
+		 					     				  	<li class="nav-item">
+		 					     				  		<b><a class="linkdaftar nav-link" id="lainnya" href="#" onclick="lainnyaOn()">
+		 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+		 					     				  			  	<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
+		 					     				  			</svg>
+			     					     					<p class="text-center">Lainnya</p>
+		 					     				  		</a></b>
+		 					     				    	
+		 					     				  	</li>
+		 					     				</ul>
+		    		        	     		</div>
+	 					     				
+		    		        	     	</div>
+		    		        	     	<div class="card-body">
+		    		        	     		<?php
+		    		        	     		foreach ($db->getOrderAdmin($kode_akun) as $ordered) {
+		    		        	     			?>
+		    		        	     				<div class="mb-3">
+		        	     					     		<div class="deskripsi-produk white-border-b">
+		        	     					     			<div class="normal-card card mb-3 px-3 " style="border: 0; border-radius: 10px; height:auto;">
+
+		        	     					     			  	<div class="row g-0">
+		        	     					     				    <div class="col-md-4">
+		        	     					     				      	<img src="Asset/<?php echo $ordered['kode_produk'] ?>.jpg" class="img-fluid rounded-start imgProduk" alt="...">
+		        	     					     				    </div>
+		        	     					     				    <div class="col-md-8">
+		        	     					     				      	<div class="card-body justify-content-between align-items-center ">
+		        	     					     				      		<div class="d-flex justify-content-between align-items-center mb-3">
+		        	     					     				      			<h3 class="card-title judulProduk"><?php echo $ordered['nama_produk']?></h3>
+		        	     					     				      		</div>
+		        	     					     					        <p class="card-text">
+		        	     					     				        		<b>Rp. <?php echo $ordered['hargasatuan']." x ".$ordered['jumlahBeli']?></b>
+		        	     					     				        	</p>
+		        	     					     					        <p class="card-text">
+		        	     					     				        		<b>Ongkos Kirim Rp. <?php echo $ongkir; ?></b>
+		        	     					     				        	</p>
+		        	     					     				      	</div>
+		        	     					     				    </div>
+		        	     					     			  	</div>
+		        	     					     			</div>
+		        	     					     		</div>
+
+
+		        	     					     		<div class="white-border-b">
+		        	     					     			<div class="col-md-10 mx-auto">
+		        	     					     				<table class="table table-borderless">
+		        	     						     				<tr>
+		        	     						     					<td><b>Total Harga Produk</b></td>
+		        	     						     					<td class="text-end"><b>Rp. <?php echo $ordered['hargasatuan']*$ordered['jumlahBeli']?></b></td>
+		        	     						     				</tr>
+		        	     						     				<tr>
+		        	     						     					<td><b>Total Pesanan</b></td>
+		        	     						     					<td class="text-end"><b>Rp. <?php echo $ordered['hargasatuan']*$ordered['jumlahBeli']+$ongkir?></b></td>
+		        	     						     				</tr>
+		        	     						     			</table>
+		        	     					     			</div>
+		        	     					     			
+		        	     					     		</div>
+
+
+		        	     					     		<div class="white-border-b">
+		        	     					     			<div class="col-md-10 mx-auto">
+		        	     					     				<table class="table table-borderless">
+		        	     						     				<tr>
+		        	     						     					<td>Waktu Pemesanan</td>
+		        	     						     					<td class="text-end"><?php echo $ordered['waktu_pemesanan']?></td>
+		        	     						     				</tr>
+		        	     						     				<tr>
+		        	     						     					<td>Waktu Pembayaran</td>
+		        	     						     					<td class="text-end"><?php echo $ordered['waktu_pembayaran']?></td>
+		        	     						     				</tr>
+		        	     						     			</table>
+		        	     					     			</div>
+		        	     					     			
+		        	     					     		</div>
+
+		        	     					     		<div class="p-3 px-5">
+		        	     					     			<div class="mx-auto my-3 d-flex justify-content-center">
+		        	     					     				<button class="btn bg-col2 ms-3 rounded-3">Terima Pesanan</button>
+		        	     					     				<button class="btn bg-col5 rounded-3">Tolak Pesanan</button>
+		        	     					     			</div>
+		        	     					     		</div>
+		    		        	     					<hr class="white-border" style="border:4px solid;">
+		    		        	     				</div>
+		    		        	     				<?php
+		    		        	     		}
+		    		        	     		?>
+		    		        	     		
+		    		        	     	</div>
+		    		        	    </div>
+		    		          	</div>
+			    		  	<?php
+			    		break;
+			    	
+			    	case "kirim":
+			    		?>
+		    		        <div class="col-md-9" id="kirim" >
+		        			    <div>
+		        			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+		        			     		<h3 class="header2 text-start">Jasa Kirim</h3>
+		        			     	</div>
+		        			    </div>
+		        		  	</div>
+			    		  	<?php
+			    		break;
+			    	case "settingA":
+			    		?>
+	    		            <div class="col-md-9" id="settingA">
 	    		        	    <div>
 	    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-	    		        	     		<h3 class="header2 text-start">Penjualan Saya</h3>
-	    		        	     	</div>
-	    		        	     	<div class="card-header" style="background-color:transparent; border: none;">
-	    		        	     		<div class="m-3 d-flex justify-content-center align-items-center px-5">
-	 					     				<ul class="nav nav-tabs" id="myTab">
-	 					     				  	<li class="nav-item">
-	 					     				  		<b><a class="linkdaftar nav-link active" aria-current="page" id="kemas" href="#" onclick="kemasOn()">
-	 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-box-seam" viewBox="0 0 16 16">
-		     					     					  	<path d="M8.186 1.113a.5.5 0 0 0-.372 0L1.846 3.5l2.404.961L10.404 2l-2.218-.887zm3.564 1.426L5.596 5 8 5.961 14.154 3.5l-2.404-.961zm3.25 1.7-6.5 2.6v7.922l6.5-2.6V4.24zM7.5 14.762V6.838L1 4.239v7.923l6.5 2.6zM7.443.184a1.5 1.5 0 0 1 1.114 0l7.129 2.852A.5.5 0 0 1 16 3.5v8.662a1 1 0 0 1-.629.928l-7.185 2.874a.5.5 0 0 1-.372 0L.63 13.09a1 1 0 0 1-.63-.928V3.5a.5.5 0 0 1 .314-.464L7.443.184z"/>
-		     					     					</svg>
-		     					     					<p class="text-center">Dikemas</p>
-	 					     				  		</a></b>
-	 					     				    	
-	 					     				  	</li>
-	 					     				  	<li class="nav-item">
-	 					     				  		<b><a class="linkdaftar nav-link" id="kirim" href="#" onclick="kirimOn()">
-	 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-truck" viewBox="0 0 16 16">
-	 					     				  			  	<path d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/>
-	 					     				  			</svg>
-		     					     					<p class="text-center">Dikirim</p>
-	 					     				  		</a></b>
-	 					     				    	
-	 					     				  	</li>
-	 					     				  	<li class="nav-item">
-	 					     				  		<b><a class="linkdaftar nav-link text-center" aria-current="page" id="batal" href="#" onclick="batalOn()">
-	 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-bag-x-fill" viewBox="0 0 16 16">
-	 					     				  			  <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zM6.854 8.146a.5.5 0 1 0-.708.708L7.293 10l-1.147 1.146a.5.5 0 0 0 .708.708L8 10.707l1.146 1.147a.5.5 0 0 0 .708-.708L8.707 10l1.147-1.146a.5.5 0 0 0-.708-.708L8 9.293 6.854 8.146z"/>
-	 					     				  			</svg>
-		     					     					<p class="text-center">Dibatalkan</p>
-	 					     				  		</a></b>
-	 					     				    	
-	 					     				  	</li>
-	 					     				  	<li class="nav-item">
-	 					     				  		<b><a class="linkdaftar nav-link" id="lainnya" href="#" onclick="lainnyaOn()">
-	 					     				  			<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
-	 					     				  			  	<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
-	 					     				  			</svg>
-		     					     					<p class="text-center">Lainnya</p>
-	 					     				  		</a></b>
-	 					     				    	
-	 					     				  	</li>
-	 					     				</ul>
-	    		        	     		</div>
- 					     				
-	    		        	     	</div>
-	    		        	     	<div class="card-body">
-	    		        	     		<?php
-	    		        	     		foreach ($db->getOrderAdmin($kode_akun) as $ordered) {
-	    		        	     			?>
-	    		        	     				<div class="mb-3">
-	        	     					     		<div class="deskripsi-produk white-border-b">
-	        	     					     			<div class="normal-card card mb-3 px-3 " style="border: 0; border-radius: 10px; height:auto;">
-
-	        	     					     			  	<div class="row g-0">
-	        	     					     				    <div class="col-md-4">
-	        	     					     				      	<img src="Asset/<?php echo $ordered['kode_produk'] ?>.jpg" class="img-fluid rounded-start imgProduk" alt="...">
-	        	     					     				    </div>
-	        	     					     				    <div class="col-md-8">
-	        	     					     				      	<div class="card-body justify-content-between align-items-center ">
-	        	     					     				      		<div class="d-flex justify-content-between align-items-center mb-3">
-	        	     					     				      			<h3 class="card-title judulProduk"><?php echo $ordered['nama_produk']?></h3>
-	        	     					     				      		</div>
-	        	     					     					        <p class="card-text">
-	        	     					     				        		<b>Rp. <?php echo $ordered['hargasatuan']." x ".$ordered['jumlahBeli']?></b>
-	        	     					     				        	</p>
-	        	     					     					        <p class="card-text">
-	        	     					     				        		<b>Ongkos Kirim Rp. <?php echo $ongkir; ?></b>
-	        	     					     				        	</p>
-	        	     					     				      	</div>
-	        	     					     				    </div>
-	        	     					     			  	</div>
-	        	     					     			</div>
-	        	     					     		</div>
-
-
-	        	     					     		<div class="white-border-b">
-	        	     					     			<div class="col-md-10 mx-auto">
-	        	     					     				<table class="table table-borderless">
-	        	     						     				<tr>
-	        	     						     					<td><b>Total Harga Produk</b></td>
-	        	     						     					<td class="text-end"><b>Rp. <?php echo $ordered['hargasatuan']*$ordered['jumlahBeli']?></b></td>
-	        	     						     				</tr>
-	        	     						     				<tr>
-	        	     						     					<td><b>Total Pesanan</b></td>
-	        	     						     					<td class="text-end"><b>Rp. <?php echo $ordered['hargasatuan']*$ordered['jumlahBeli']+$ongkir?></b></td>
-	        	     						     				</tr>
-	        	     						     			</table>
-	        	     					     			</div>
-	        	     					     			
-	        	     					     		</div>
-
-
-	        	     					     		<div class="white-border-b">
-	        	     					     			<div class="col-md-10 mx-auto">
-	        	     					     				<table class="table table-borderless">
-	        	     						     				<tr>
-	        	     						     					<td>Waktu Pemesanan</td>
-	        	     						     					<td class="text-end"><?php echo $ordered['waktu_pemesanan']?></td>
-	        	     						     				</tr>
-	        	     						     				<tr>
-	        	     						     					<td>Waktu Pembayaran</td>
-	        	     						     					<td class="text-end"><?php echo $ordered['waktu_pembayaran']?></td>
-	        	     						     				</tr>
-	        	     						     			</table>
-	        	     					     			</div>
-	        	     					     			
-	        	     					     		</div>
-
-	        	     					     		<div class="p-3 px-5">
-	        	     					     			<div class="my-3 d-flex justify-content-center">
-	        	     					     				<button class="btn bg-col2 me-3 rounded-3">Terima Pesanan</button>
-	        	     					     				<button class="btn bg-col5 rounded-3">Tolak Pesanan</button>
-	        	     					     			</div>
-	        	     					     		</div>
-	    		        	     					<hr class="white-border" style="border:4px solid;">
-	    		        	     				</div>
-	    		        	     				<?php
-	    		        	     		}
-	    		        	     		?>
-	    		        	     		
+	    		        	     		<h3 class="header2 text-start">Pengaturan Toko</h3>
 	    		        	     	</div>
 	    		        	    </div>
 	    		          	</div>
-		    		  	<?php
-		    		break;
-		    	
-		    	case "kirim":
-		    		?>
-	    		        <div class="col-md-9" id="kirim" >
-	        			    <div>
-	        			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-	        			     		<h3 class="header2 text-start">Jasa Kirim</h3>
-	        			     	</div>
-	        			    </div>
-	        		  	</div>
-		    		  	<?php
-		    		break;
-		    	case "settingA":
-		    		?>
-    		            <div class="col-md-9" id="settingA">
-    		        	    <div>
-    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-    		        	     		<h3 class="header2 text-start">Pengaturan Toko</h3>
-    		        	     	</div>
-    		        	    </div>
-    		          	</div>
-		    		  	<?php
-		    		break;
-		    	case "helpA":
-		    		?>
-    		            <div class="col-md-9" id="helpA">
-    		        	    <div>
-    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-    		        	     		<h3 class="header2 text-start">Bantuan</h3>
-    		        	     	</div>
-    		        	    </div>
-    		          </div>
-		    		  	<?php
-		    		break;
-		    	
-		    	case "akun":
-		    		?>
-		    		    <div class="col-md-9" id="akun">
-		    			    <div>
-		    			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-		    			     		<h3 class="header2 text-start">Akun Saya</h3>
-		    			     	</div>
-		    			    </div>
-		    		  	</div>
-		    		  	<?php
-		    		break;
-		    	case "favorit":
-		    		?>
-	    		        <div class="col-md-9" id="favorit">
-	    		    	    <div>
-	    		    	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-	    		    	     		<h3 class="header2 text-start">Favorit Saya</h3>
-	    		    	     	</div>
-	    		    	    </div>
-	    		      	</div>
-		    		  	<?php
-		    		break;
-		    	
-		    	case "order":
-		    		?>
-	    		            <div class="col-md-9" id="pesanan"=>
+			    		  	<?php
+			    		break;
+			    	case "helpA":
+			    		?>
+	    		            <div class="col-md-9" id="helpA">
 	    		        	    <div>
 	    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-	    		        	     		<h3 class="header2 text-start">Pesanan Saya</h3>
+	    		        	     		<h3 class="header2 text-start">Bantuan</h3>
 	    		        	     	</div>
-	    		        	     	<div class="card-body">
-	    		        	     		<?php
-	    		        	     		foreach ($db->getOrderMember($kode_akun) as $ordered) {
-	    		        	     			?>
-	    		        	     				<div class="mb-3">
-	        	     					     		<div class="deskripsi-produk white-border-b">
-	        	     					     			<div class="m-3 d-flex justify-content-between align-items-center">
-	        	     					     				<button class="btn d-flex align-items-center">
-	        	     					     					<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-shop me-3" viewBox="0 0 16 16">
-	        	     					     					  	<path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"/>
-	        	     					     					</svg>
-	        	     					     					<p style="font-size: 48px; margin: 0;"><?php echo $ordered['nama_toko']?></p>
-	        	     					     				</button>
-	        	     					     				
-	        	     					     			</div>
-	        	     					     			<div class="normal-card card mb-3 px-3 " style="border: 0; border-radius: 10px; height:auto;">
+	    		        	    </div>
+	    		          </div>
+			    		  	<?php
+			    		break;
+		    	
+		    	// member Menu
+			    	case "akun":
+			    		?>
+			    		    <div class="col-md-9" id="akun">
+			    			    <div>
+			    			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+			    			     		<h3 class="header2 text-start">Akun Saya</h3>
+			    			     	</div>
+			    			    </div>
+			    		  	</div>
+			    		  	<?php
+			    		break;
+			    	case "favorit":
+			    		?>
+		    		        <div class="col-md-9" id="favorit">
+		    		    	    <div>
+		    		    	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+		    		    	     		<h3 class="header2 text-start">Favorit Saya</h3>
+		    		    	     	</div>
+		    		    	    </div>
+		    		      	</div>
+			    		  	<?php
+			    		break;
+			    	
+			    	case "order":
+			    		?>
+		    		            <div class="col-md-9" id="pesanan"=>
+		    		        	    <div>
+		    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+		    		        	     		<h3 class="header2 text-start">Pesanan Saya</h3>
+		    		        	     	</div>
+		    		        	     	<div class="card-body">
+		    		        	     		<?php
+		    		        	     		foreach ($db->getOrderMember($kode_akun) as $ordered) {
+		    		        	     			?>
+		    		        	     				<div class="mb-3">
+		        	     					     		<div class="deskripsi-produk white-border-b">
+		        	     					     			<div class="m-3 d-flex justify-content-between align-items-center">
+		        	     					     				<button class="btn d-flex align-items-center">
+		        	     					     					<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-shop me-3" viewBox="0 0 16 16">
+		        	     					     					  	<path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z"/>
+		        	     					     					</svg>
+		        	     					     					<p style="font-size: 48px; margin: 0;"><?php echo $ordered['nama_toko']?></p>
+		        	     					     				</button>
+		        	     					     				
+		        	     					     			</div>
+		        	     					     			<div class="normal-card card mb-3 px-3 " style="border: 0; border-radius: 10px; height:auto;">
 
-	        	     					     			  	<div class="row g-0">
-	        	     					     				    <div class="col-md-4">
-	        	     					     				      	<img src="Asset/<?php echo $ordered['kode_produk'] ?>.jpg" class="img-fluid rounded-start imgProduk" alt="...">
-	        	     					     				    </div>
-	        	     					     				    <div class="col-md-8">
-	        	     					     				      	<div class="card-body justify-content-between align-items-center ">
-	        	     					     				      		<div class="d-flex justify-content-between align-items-center mb-3">
-	        	     					     				      			<h3 class="card-title judulProduk"><?php echo $ordered['nama_produk']?></h3>
-	        	     					     				      		</div>
-	        	     					     					        <p class="card-text">
-	        	     					     					        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag-fill" viewBox="0 0 16 16">
-	        	     					     					        	  <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
-	        	     					     					        	</svg>
-	        	     					     				        		<b>Rp. <?php echo $ordered['hargasatuan']?></b>
-	        	     					     				        	</p>
-	        	     					     				      	</div>
-	        	     					     				    </div>
-	        	     					     			  	</div>
-	        	     					     			</div>
-	        	     					     		</div>
+		        	     					     			  	<div class="row g-0">
+		        	     					     				    <div class="col-md-4">
+		        	     					     				      	<img src="Asset/<?php echo $ordered['kode_produk'] ?>.jpg" class="img-fluid rounded-start imgProduk" alt="...">
+		        	     					     				    </div>
+		        	     					     				    <div class="col-md-8">
+		        	     					     				      	<div class="card-body justify-content-between align-items-center ">
+		        	     					     				      		<div class="d-flex justify-content-between align-items-center mb-3">
+		        	     					     				      			<h3 class="card-title judulProduk"><?php echo $ordered['nama_produk']?></h3>
+		        	     					     				      		</div>
+		        	     					     					        <p class="card-text">
+		        	     					     					        	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-tag-fill" viewBox="0 0 16 16">
+		        	     					     					        	  <path d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+		        	     					     					        	</svg>
+		        	     					     				        		<b>Rp. <?php echo $ordered['hargasatuan']?></b>
+		        	     					     				        	</p>
+		        	     					     				      	</div>
+		        	     					     				    </div>
+		        	     					     			  	</div>
+		        	     					     			</div>
+		        	     					     		</div>
 
 
-	        	     					     		<div class="white-border-b">
-	        	     					     			<div class="col-md-10 mx-auto">
-	        	     					     				<table class="table table-borderless">
-	        	     						     				<tr>
-	        	     						     					<td>No Pesanan</td>
-	        	     						     					<td class="text-end"><b><?php echo $ordered['kode_produk']."-".$ordered['kode_order'] ?></b></td>
-	        	     						     				</tr>
-	        	     						     				<tr>
-	        	     						     					<td>Waktu Pemesanan</td>
-	        	     						     					<td class="text-end"><?php echo $ordered['waktu_pemesanan']?> </td>
-	        	     						     				</tr>
-	        	     						     				<tr>
-	        	     						     					<td>Waktu Pembayaran</td>
-	        	     						     					<td class="text-end"><?php echo $ordered['waktu_pembayaran']?></td>
-	        	     						     				</tr>
-	        	     						     			</table>
-	        	     					     			</div>
-	        	     					     			
-	        	     					     		</div>
+		        	     					     		<div class="white-border-b">
+		        	     					     			<div class="col-md-10 mx-auto">
+		        	     					     				<table class="table table-borderless">
+		        	     						     				<tr>
+		        	     						     					<td>No Pesanan</td>
+		        	     						     					<td class="text-end"><b><?php echo $ordered['kode_produk']."-".$ordered['kode_order'] ?></b></td>
+		        	     						     				</tr>
+		        	     						     				<tr>
+		        	     						     					<td>Waktu Pemesanan</td>
+		        	     						     					<td class="text-end"><?php echo $ordered['waktu_pemesanan']?> </td>
+		        	     						     				</tr>
+		        	     						     				<tr>
+		        	     						     					<td>Waktu Pembayaran</td>
+		        	     						     					<td class="text-end"><?php echo $ordered['waktu_pembayaran']?></td>
+		        	     						     				</tr>
+		        	     						     			</table>
+		        	     					     			</div>
+		        	     					     			
+		        	     					     		</div>
 
-	        	     					     		<div class="p-3 px-5">
-	        	     					     			<b></b>
-	        	     					     			<p class="text-muted">Update terakhir </p>
-	        	     					     			<div class="my-3 d-flex justify-content-center">
-	        	     					     				<button class="btn bg-col2 me-3 rounded-pill">Lacak Pesanan</button>
-	        	     					     				<button class="btn bg-col2 rounded-pill">Batalkan Pesanan</button>
-	        	     					     			</div>
-	        	     					     		</div>
-	    		        	     					<hr class="white-border" style="border:4px solid;">
-	    		        	     				</div>
-	    		        	     				<?php
-	    		        	     		}
-	    		        	     		?>
-	    		        	     		
+		        	     					     		<div class="p-3 px-5">
+		        	     					     			<b></b>
+		        	     					     			<p class="text-muted">Update terakhir </p>
+		        	     					     			<div class="my-3 d-flex justify-content-center">
+		        	     					     				<button class="btn bg-col2 me-3 rounded-pill">Lacak Pesanan</button>
+		        	     					     				<button class="btn bg-col2 rounded-pill">Batalkan Pesanan</button>
+		        	     					     			</div>
+		        	     					     		</div>
+		    		        	     					<hr class="white-border" style="border:4px solid;">
+		    		        	     				</div>
+		    		        	     				<?php
+		    		        	     		}
+		    		        	     		?>
+		    		        	     		
+		    		        	     	</div>
+		    		        	    </div>
+		    		          	</div>
+			    		  	<?php
+			    		break;
+			    	
+			    	case "bayar":
+			    		?>
+		    		        <div class="col-md-9" id="bayar" >
+		        			    <div>
+		        			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+		        			     		<h3 class="header2 text-start">Konfirmasi Pembayaran</h3>
+		        			     	</div>
+		        			    </div>
+		        		  	</div>
+			    		  	<?php
+			    		break;
+			    	case "settingM":
+			    		?>
+	    		            <div class="col-md-9" id="setting">
+	    		        	    <div>
+	    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+	    		        	     		<h3 class="header2 text-start">Pengaturan Akun</h3>
 	    		        	     	</div>
 	    		        	    </div>
 	    		          	</div>
-		    		  	<?php
-		    		break;
-		    	
-		    	case "bayar":
-		    		?>
-	    		        <div class="col-md-9" id="bayar" >
-	        			    <div>
-	        			     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-	        			     		<h3 class="header2 text-start">Konfirmasi Pembayaran</h3>
-	        			     	</div>
-	        			    </div>
-	        		  	</div>
-		    		  	<?php
-		    		break;
-		    	case "settingM":
-		    		?>
-    		            <div class="col-md-9" id="setting">
-    		        	    <div>
-    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-    		        	     		<h3 class="header2 text-start">Pengaturan Akun</h3>
-    		        	     	</div>
-    		        	    </div>
-    		          	</div>
-		    		  	<?php
-		    		break;
-		    	case "helpM":
-		    		?>
-    		            <div class="col-md-9" id="help">
-    		        	    <div>
-    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
-    		        	     		<h3 class="header2 text-start">Bantuan</h3>
-    		        	     	</div>
-    		        	    </div>
-    		          </div>
-		    		  	<?php
-		    		break;
+			    		  	<?php
+			    		break;
+			    	case "helpM":
+			    		?>
+	    		            <div class="col-md-9" id="help">
+	    		        	    <div>
+	    		        	     	<div class="card-header bg-col2" style="background-color:#9B785C;">
+	    		        	     		<h3 class="header2 text-start">Bantuan</h3>
+	    		        	     	</div>
+	    		        	    </div>
+	    		          </div>
+			    		  	<?php
+			    		break;
 		    }
 		    ?>
 		</div>
@@ -519,5 +699,22 @@
 		document.getElementById('batal').classList.remove("active");
 		document.getElementById('lainnya').classList.add("active");
 
+	}
+
+	function priviewImage(){
+		var file = document.getElementById('img-input').files;
+		if (file.length > 0) {
+			var fileReader = new FileReader();
+
+			fileReader.onload = function (event){
+				document.getElementById('uploadedIMG').setAttribute("src",event.target.result)
+			};
+
+			fileReader.readAsDataURL(file[0]);
+		}
+	}
+	function getImage(imagename){
+		document.getElementById('displayImagePath').innerHTML = "File Path: " + imagename;
+		// alert(imagename);
 	}
 </script>
