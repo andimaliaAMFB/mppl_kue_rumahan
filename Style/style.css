@@ -19,6 +19,9 @@ body{
 .text-col5{
 	color: #C4C4C4;
 }
+.text-col6{
+	color: #DAC4AD;
+}
 .bg-col1{
 	background: #E2D1BF;
 }
@@ -33,6 +36,9 @@ body{
 }
 .bg-col5{
 	background: #C4C4C4;
+}
+.bg-col6{
+	background: #DAC4AD;
 }
 .white-border-b,
 .card.white-border-b,
@@ -103,6 +109,12 @@ hr.white-border,
 .btn.border-col5{
 	color: #FAF8FD;
 	background: #C4C4C4;
+}
+.btn.bg-col6,
+.btn.bg-col6.black-text,
+.btn.border-col6{
+	color: #FAF8FD;
+	background: #DAC4AD;
 }
 .btn.bg-col1.black-text{
 	color: #000;
@@ -370,6 +382,25 @@ nav .helper ul li:not(:first-child){
 .form-content .form-input .tombolsubmit{
 	border-radius: 5px;
 	border-color: transparent;
+}
+.form-select.col-sm-auto{flex:0 0 auto;width:auto}
+.form-select.col-sm-1{flex:0 0 auto;width:8.33333333%}
+.form-select.col-sm-2{flex:0 0 auto;width:16.66666667%}
+.form-select.col-sm-3{flex:0 0 auto;width:25%}
+.form-select.col-sm-4{flex:0 0 auto;width:33.33333333%}
+.form-select.col-sm-5{flex:0 0 auto;width:41.66666667%}
+.form-select.col-sm-6{flex:0 0 auto;width:50%}
+.form-select.col-sm-7{flex:0 0 auto;width:58.33333333%}
+.form-select.col-sm-8{flex:0 0 auto;width:66.66666667%}
+.form-select.col-sm-9{flex:0 0 auto;width:75%}
+.form-select.col-sm-10{flex:0 0 auto;width:83.33333333%}
+.form-select.col-sm-11{flex:0 0 auto;width:91.66666667%}
+.form-select.col-sm-12{flex:0 0 auto;width:100%}
+.img-up > .form-file{
+	display: none;
+}
+.img-up .img-up-icon{
+	cursor: pointer;
 }
 
 .log-akun ul li{
